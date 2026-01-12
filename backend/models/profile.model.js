@@ -3,22 +3,26 @@ import mongoose from 'mongoose'
 const educationSchema = new mongoose.Schema({
     school: {
         type: String,
-        defualt: '',
+        default: '',
     },
     degree: {
         type: String,
-        defualt: '',
+        default: '',
     },
     fieldOfStudy: {
         type: String,
-        defualt: '',
+        default: '',
+    },
+    years: {
+        type: String,
+        default: '',
     }
 });
 
 const workSchema = new mongoose.Schema({
     company: {
         type: String,
-        defualt: '',
+        default: '',
     },
     position: {
         type: String,
@@ -26,7 +30,7 @@ const workSchema = new mongoose.Schema({
     },
     years: {
         type: String,
-        defualt: '',
+        default: '',
     },
 });
 

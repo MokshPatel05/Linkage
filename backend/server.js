@@ -12,10 +12,12 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(express.static("uploads"));
 
 //all routes
 app.use(postsRoutes);
 app.use(usersRoutes);
+
 
 //environment variables
 const MONGO_URL = process.env.MONGO_URL;
