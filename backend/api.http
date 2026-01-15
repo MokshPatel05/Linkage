@@ -19,7 +19,7 @@ Content-Type: application/json
     "name": "moksh patel",
     "email": "mokshpatel05@gmail.com",
     "password": "password123",
-    "username": "mokshpatel05"
+    "username": "mokshpatel"
 }
 
 ###
@@ -51,7 +51,7 @@ GET http://localhost:9080/get_user_and_profile HTTP/1.1
 Content-Type: application/json
 
 {
-    "Token": "a17dc259e25906b3aafd048806a120ded38cab4ebef29a555255463eae89144f"
+    "token": "a3da5c07eb0083ca0c424be42a98c7aef1bb5981ecf3bcb58c8391424f50a72b"
 }
 
 ###
@@ -59,7 +59,7 @@ GET http://localhost:9080/get_user_and_profile HTTP/1.1
 Content-Type: application/json
 
 {
-    "Token": "aeeea4575df21a4a94f00e3a20276108114ef4da00bd024790dfc3442f934d76"
+    "token": "3872ef431a90103ee68667ee1893607451986b56b2039f9c0e9601f913e1d34c"
 }
 
 
@@ -71,7 +71,7 @@ POST http://localhost:9080/update_profile_data HTTP/1.1
 Content-Type: application/json
 
 {
-    "token": "aeeea4575df21a4a94f00e3a20276108114ef4da00bd024790dfc3442f934d76",
+    "token": "3872ef431a90103ee68667ee1893607451986b56b2039f9c0e9601f913e1d34c",
     "bio": "I am a software developer",
     "currentPost": "Software Developer",
     "pastWork": [
@@ -95,5 +95,5 @@ Content-Type: application/json
 
 # get all users profile
 
-GET http://localhost:9080/users/get_all_users_profiles HTTP/1.1
+GET http://localhost:9080/user/get_all_users_profiles HTTP/1.1
 Content-Type: application/json

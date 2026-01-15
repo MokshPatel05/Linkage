@@ -15,7 +15,7 @@ const convertProfileToPDF = async (profileData) => {
     const stream = fs.createWriteStream("uploads/" + outPutPath);
     pdf.pipe(stream);
 
-    pdf.image(`uploads/${profileData.userId.profilePicture}`, { align: "center", valign: "center", fit: [250, 300] });
+    pdf.image(`uploads/profile_pictures/${profileData.userId.profilePicture}`, { align: "center", valign: "center", fit: [250, 300] });
     pdf.fontSize(16).text(`Name : ${profileData.userId.name}`, { align: "center" });
     pdf.fontSize(16).text(`Username : ${profileData.userId.username}`, { align: "center" });
     pdf.fontSize(16).text(`Email : ${profileData.userId.email}`, { align: "center" });
@@ -97,10 +97,10 @@ export const login = async (req, res) => {
         const token = crypto.randomBytes(32).toString("hex");
         await User.updateOne({ _id: user._id }, { $set: { token } });
 
-    return res.status(200).json({ Message: "User logged in successfully" });
-} catch (e) {
-    return res.status(500).json({ Message: "Something went wrong in login controller : " + e.message });
-}
+        return res.status(200).json({ Message: "User logged in successfully" });
+    } catch (e) {
+        return res.status(500).json({ Message: "Something went wrong in login controller : " + e.message });
+    }
 }
 
 //Update Profile Picture Controller
