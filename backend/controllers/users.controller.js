@@ -98,7 +98,10 @@ export const login = async (req, res) => {
         const token = crypto.randomBytes(32).toString("hex");
         await User.updateOne({ _id: user._id }, { $set: { token } });
 
-        return res.status(200).json({ Message: "User logged in successfully" });
+        return res.json({
+            Message: "User logged in successfully",
+            token
+        });
     } catch (e) {
         return res.status(500).json({ Message: "Something went wrong in login controller : " + e.message });
     }
