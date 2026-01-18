@@ -17,7 +17,7 @@ export const loginUser = createAsyncThunk(
             }
             return thunkAPI.fulfillWithValue(response.data.token);
         } catch (error) {
-            return thunkAPI.rejectWithValue("Login Thunk Failed : " + error.response.data);
+            return thunkAPI.rejectWithValue("Login Thunk Failed : " + error.response.data.Message);
         }
     }
 );
@@ -27,18 +27,14 @@ export const registerUser = createAsyncThunk(
     async (user, thunkAPI) => {
         try {
             const responce = await clientServer.post("/register", {
+                username: user.username,
                 name: user.name,
                 email: user.email,
                 password: user.password
             })
-            if (responce.data.token) {
-                localStorage.setItem("token", responce.data.token);
-            } else {
-                return thunkAPI.rejectWithValue("Register Thunk Failed : Token not found");
-            }
-            return thunkAPI.fulfillWithValue(responce.data.token);
+            return thunkAPI.fulfillWithValue(responce.data);
         } catch (error) {
-            return thunkAPI.rejectWithValue("Register Thunk Failed : " + error.response.data);
+            return thunkAPI.rejectWithValue("Register Thunk Failed : " + error.response.data.Message);
         }
     }
-)
+)   
