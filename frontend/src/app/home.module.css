@@ -4,3 +4,50 @@
     font-family: "poppins", sans-serif;
     padding: 1.2rem;
 }
+
+.mainContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 4rem;
+    padding-inline: 2rem;
+    height: 80vh;
+}
+
+.mainContainer__left{
+    flex: 0.5;
+}
+.mainContainer__right{
+    flex: 0.5;
+}
+
+.mainContainer__left > :nth-child(1){
+    font-size: 2rem;
+    font-weight: 600;
+    color: #000;
+    margin-bottom: 0.8rem;
+    background: -webkit-linear-gradient(170deg, #b9b8b8, #333);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.mainContainer__left > :nth-child(2){
+    font-size: 1.5rem;
+    font-weight: 500;
+    color: #393636;
+}
+
+.mainContainer__left > div.buttonJoin{
+    width: fit-content;
+    padding: 0.8rem 1.5rem;
+    background-color: #5681BF;
+    color: #fff;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    margin-top: 1rem;
+}
+
+.mainContainer__left > div.buttonJoin > p{
+    font-size: 1.2rem;
+    font-weight: 500;
+}

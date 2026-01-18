@@ -1,2 +1,89 @@
 /* Login page Module CSS file */
 
+
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 92vh;
+    background-color: rgba(249, 244, 244, 0.858);
+}
+
+.cardContainer {
+    height: 80vh;
+    width: 80vw;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 10px 10px 15px rgba(172, 172, 172);
+    display: flex;
+    overflow: hidden;
+}
+
+.cardContainer__left {
+    flex: 0.6;
+    padding: 2rem;
+    text-align: center;
+}
+
+.cardLeft__heading {
+    font-weight: bold;
+    font-size: 2rem;
+}
+
+.inputContainers {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 1.3rem;
+    max-width: 400px;
+    margin: 0 auto;
+    gap: 1.5rem;
+}
+
+.inputRow {
+    width: fit-content;
+    display: flex;
+    gap: 1.2rem;
+}
+
+.inputRow input {
+    width: 100%;
+    padding: 0.7rem 2rem;
+    outline: none;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+}
+
+.inputFields {
+    padding: 0.7rem 2rem;
+    outline: none;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    width: 100%;
+}
+
+.buttonWithOutline {
+    padding: 0.8rem 1.3rem;
+    border-radius: 8px;
+    border: 1px solid #00488B;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    width: fit-content;
+    margin: 0 auto;
+    width: 100%;
+    background-color: #00488B;
+    color: #fff;
+}
+
+.buttonWithOutline:hover {
+    background-color: #ffffff;
+    color: #00488B;
+}
+
+.cardContainer__right {
+    flex: 0.4;
+    background: #00488B;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

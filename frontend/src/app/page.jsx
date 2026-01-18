@@ -3,16 +3,17 @@
 
 import { useRouter } from "next/navigation";
 import style from "./home.module.css";
+import UserLayout from "@/layout/UserLayout/page";
 
 export default function Home() {
 
   const router = useRouter();
   return (
-    <>
+    <UserLayout>
       <div className={style.container}>
         <div className={style.mainContainer}>
           <div className={style.mainContainer__left}>
-            <p>Linkage is a platform that allows you to connect with your friends without any exaggeration.</p>
+            <p>Linkage: Connect with your friends <br /> without any exaggeration.</p>
             <p>True Social Media Platform, With Stories no blufs !!!</p>
           
           <div 
@@ -26,6 +27,6 @@ export default function Home() {
           </div>
         </div>
       </div>
-    </>
+    </UserLayout>
   );
 }

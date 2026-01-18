@@ -1,0 +1,25 @@
+.container {
+    padding: 1rem 2rem;
+}
+
+.Navbar{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.Navbar > img{
+    height: 2rem;
+    cursor: pointer;
+}
+
+.NavbarOptionsContainer > div{
+    cursor: pointer;
+}
+
+.buttonJoin{
+    padding: 0.5rem 1rem;
+    background-color: #5681BF;
+    color: #fff;
+    border-radius: 0.5rem;
+    cursor: pointer;
+}
