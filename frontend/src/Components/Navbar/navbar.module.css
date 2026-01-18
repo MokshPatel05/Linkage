@@ -23,3 +23,8 @@
     border-radius: 0.5rem;
     cursor: pointer;
 }
+.buttonJoin:hover{
+    transition: all 0.2s ease-in-out;
+    background-color: #426ccd;
+    box-shadow: 0 0 0.3rem #426ccd;
+}

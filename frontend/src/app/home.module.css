@@ -31,7 +31,7 @@
     color: #000;
     margin-bottom: 0.8rem;
     background: -webkit-linear-gradient(170deg, #b9b8b8, #333);
-    -webkit-background-clip: text;
+    background-clip: text;
     -webkit-text-fill-color: transparent;
 }
 
