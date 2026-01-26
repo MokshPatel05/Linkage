@@ -4,13 +4,14 @@ import React from 'react'
 import styles from './DashboardLayout.module.css'
 import { useRouter } from 'next/navigation'
 import { setTokenIsThere } from '@/config/redux/reducer/authReducer';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
 
 const DashboardLayout = ({ children }) => {
 
     const router = useRouter();
     const dispatch = useDispatch();
+    const authState = useSelector((state) => state.auth);
 
     //if the token not exists then redirect the user to the login page
     useEffect(() => {
@@ -52,9 +53,12 @@ const DashboardLayout = ({ children }) => {
 
                     <div className={styles.homeContainer__extraContainer}>
                         <h3>Top profiles</h3>
-                        <div>
 
-                        </div>
+                        {authState.all_profile_fetched && authState.all_users.map((profile) => (
+                            <div key={profile._id}>
+                                <p>{profile.userId.name}</p>
+                            </div>
+                        ))}
                     </div>
                 </div>
             </div>
