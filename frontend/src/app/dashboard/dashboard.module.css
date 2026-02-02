@@ -1,15 +1,16 @@
 .createPostContainer {
     display: flex;
     align-items: center;
-    height: 10svh;
-    width: 70%;
+    width: 600px;
     gap: 1.3rem;
     margin: 0 auto;
-    border: 1px solid silver;
+    border: 1px solid #e0e0e0;
     border-radius: 10px;
     padding: 0.8rem 1.5rem;
-    background-color: rgb(255, 246, 246);
+    background-color: white;
     position: relative;
+    margin-bottom: 20px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.05);
 }
 
 .createPostContainer>textarea {
@@ -18,43 +19,153 @@
 }
 
 .Fab {
-    background: #4F7BA0;
+    background: #0a66c2;
     border-radius: 100%;
     justify-content: center;
     display: flex;
+    padding: 8px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.Fab:hover {
+    background: #004182;
 }
 
 .Fab>svg {
-    width: fit-content;
-    height: 40px;
+    width: 24px;
+    height: 24px;
+    color: white;
 }
 
 .userProfile {
-    border-radius: 100%;
-    width: 100px;
-    height: 60%;
-    width: fit-content;
-    aspect-ratio: 1/1;
+    border-radius: 50%;
+    width: 48px;
+    height: 48px;
+    object-fit: cover;
 }
 
 .textArea {
-    width: 80%;
-    height: 70%;
-    border: 1px solid silver;
-    border-radius: 10px;
+    flex-grow: 1;
+    height: 3rem;
+    border: 1px solid #e0e0e0;
+    border-radius: 35px;
     font-family: Arial, Helvetica, sans-serif;
     padding-inline: 1.5rem;
-    padding-block: 0.8rem;
+    padding-block: 0.6rem;
     outline: none;
+    resize: none;
+    transition: background 0.2s;
+}
+
+.textArea:hover {
+    background-color: #f3f3f3;
 }
 
 .postButton {
     position: absolute;
-    right: 8;
-    bottom: -40%;
-    background-color: #4F7BA0;
+    right: 20px;
+    bottom: -50px;
+    background-color: #0a66c2;
     color: white;
-    padding: 0.4rem 1.2rem;
-    border-radius: 10px;
+    padding: 0.5rem 1.5rem;
+    border-radius: 20px;
     cursor: pointer;
+    font-weight: 600;
+    border: none;
+    transition: background 0.2s;
+}
+
+.postButton:hover {
+    background-color: #004182;
+}
+
+.postsContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    width: 100%;
+    padding-bottom: 20px;
+}
+
+.singleCard {
+    width: 600px;
+    background-color: white;
+    border-radius: 8px;
+    border: 1px solid #e0e0e0;
+    overflow: hidden;
+    box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.04), 0 2px 4px rgba(0, 0, 0, 0.04);
+}
+
+.singleCard__header {
+    display: flex;
+    align-items: center;
+    padding: 12px 16px;
+    gap: 10px;
+}
+
+.singleCard__profilePicture {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.headerInfo h3 {
+    font-size: 14px;
+    font-weight: 600;
+    color: rgba(0, 0, 0, 0.9);
+    margin: 0;
+}
+
+.headerInfo p {
+    font-size: 12px;
+    color: rgba(0, 0, 0, 0.6);
+    margin: 0;
+}
+
+.singleCard__postContainer {
+    padding: 0 0 8px 0;
+}
+
+.postBody {
+    padding: 4px 16px 12px 16px;
+    font-size: 14px;
+    color: rgba(0, 0, 0, 0.9);
+    white-space: pre-wrap;
+}
+
+.postMedia {
+    width: 100%;
+    display: block;
+    object-fit: contain;
+    max-height: 600px;
+    background-color: #f8f8f8;
+}
+
+.actionsContainer {
+    display: flex;
+    justify-content: space-around;
+    padding: 4px 8px;
+    border-top: 1px solid #e0e0e0;
+}
+
+.actionButton {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 8px;
+    border-radius: 4px;
+    cursor: pointer;
+    color: rgba(0, 0, 0, 0.6);
+    font-weight: 600;
+    font-size: 14px;
+    transition: background 0.2s;
+    flex-grow: 1;
+    justify-content: center;
+}
+
+.actionButton:hover {
+    background-color: rgba(0, 0, 0, 0.08);
 }

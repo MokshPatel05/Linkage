@@ -31,13 +31,33 @@ export const createPost = createAsyncThunk(
                 }
             });
 
-            if(response.status === 200){
+            if (response.status === 200) {
                 return thunkAPI.fulfillWithValue("Post Created Successfully");
-            }else{
+            } else {
                 return thunkAPI.rejectWithValue("Post Not Created");
             }
         } catch (error) {
             return thunkAPI.rejectWithValue("Somethig Went Wrong in createPost Thunk" + error.response.data.message);
+        }
+    }
+)
+
+export const deletePost = createAsyncThunk(
+    "post/deletePost",
+    async (post_id, thunkAPI) => {
+        try {
+            const response = await clientServer.post("/delete_post", {
+                token: localStorage.getItem("token"),
+                post_id
+            });
+
+            if (response.status === 200) {
+                return thunkAPI.fulfillWithValue("Post Deleted Successfully");
+            } else {
+                return thunkAPI.rejectWithValue("Post Not Deleted");
+            }
+        } catch (error) {
+            return thunkAPI.rejectWithValue("Something Went Wrong in deletePost Thunk" + error.response.data.message);
         }
     }
 )

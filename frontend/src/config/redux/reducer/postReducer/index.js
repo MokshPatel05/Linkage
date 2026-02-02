@@ -13,7 +13,7 @@ const initialState = {
 }
 
 const postSlice = createSlice({
-    name: "post" ,
+    name: "post",
     initialState,
     reducers: {
         reset: () => initialState,
@@ -31,7 +31,7 @@ const postSlice = createSlice({
                 state.isLoading = false;
                 state.isError = false;
                 state.postFetched = true;
-                state.posts = action.payload;
+                state.posts = action.payload.posts;
                 state.message = "Posts fetched successfully";
             })
             .addCase(getAllPosts.rejected, (state, action) => {
