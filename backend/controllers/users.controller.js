@@ -50,9 +50,14 @@ export const register = async (req, res) => {
             return res.status(400).json({ Message: "All fields are required" });
         }
 
-        const user = await User.findOne({ email });
-        if (user) {
-            return res.status(400).json({ Message: "User already exists" });
+        const existingByEmail = await User.findOne({ email });
+        if (existingByEmail) {
+            return res.status(400).json({ Message: "A user with this email already exists" });
+        }
+
+        const existingByUsername = await User.findOne({ username });
+        if (existingByUsername) {
+            return res.status(400).json({ Message: "Username already taken" });
         }
 
         const hashedPassword = await bcrypt.hash(password, 12);
@@ -106,6 +111,20 @@ export const login = async (req, res) => {
         return res.status(500).json({ Message: "Something went wrong in login controller : " + e.message });
     }
 }
+
+//Logout Controller - clear token in DB so session is invalidated
+export const logout = async (req, res) => {
+    try {
+        const { token } = req.body;
+        if (!token) {
+            return res.status(400).json({ Message: "Token is required" });
+        }
+        await User.updateOne({ token }, { $set: { token: "" } });
+        return res.json({ Message: "Logged out successfully" });
+    } catch (e) {
+        return res.status(500).json({ Message: "Something went wrong in logout controller : " + e.message });
+    }
+};
 
 //Update Profile Picture Controller
 export const updateProfilePicture = async (req, res) => {

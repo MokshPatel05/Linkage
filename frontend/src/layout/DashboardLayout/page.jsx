@@ -13,13 +13,20 @@ const DashboardLayout = ({ children }) => {
     const dispatch = useDispatch();
     const authState = useSelector((state) => state.auth);
 
-    //if the token not exists then redirect the user to the login page
+    // If no token in localStorage (client-only), redirect to login. Rehydration sets token in Redux.
     useEffect(() => {
-        if (localStorage.getItem("token") == null) {
+        // Check: Am I on the server?
+        if (typeof window === "undefined") {
+            // Yes, I am on the server. 
+            // Stop here. Don't try to touch localStorage or the app will crash.
+            return;
+        }
+        if (!localStorage.getItem("token")) {
             router.push("/login");
+            return;
         }
         dispatch(setTokenIsThere());
-    }, []);
+    }, [router, dispatch]);
 
     return (
         <div>

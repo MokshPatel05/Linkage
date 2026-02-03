@@ -10,12 +10,19 @@ export default function Home() {
   const router = useRouter();
 
   const isLoggedIn = () => {
+    // Check: Am I on the server?
+    if (typeof window === "undefined") {
+      // Yes, I am on the server. 
+      // Stop here. Don't try to touch localStorage or the app will crash.
+      return;
+    }
+    
     if (localStorage.getItem("token") != null) {
       router.push("/dashboard");
     } else {
       router.push("/login");
     }
-  }
+  };
   return (
     <UserLayout>
       <div className={style.container}>

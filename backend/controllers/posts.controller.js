@@ -1,5 +1,6 @@
 import Post from "../models/posts.model.js";
 import User from "../models/user.model.js";
+import Comment from "../models/comments.model.js";
 
 import bcrypt from "bcrypt";
 import crypto from "crypto";
@@ -30,7 +31,7 @@ export const createPost = async (req, res) => {
 
         return res.status(200).json({ message: "Post created successfully" });
     } catch (error) {
-        return res.status(500).json({ message: "Something went wrong in create post controller" + error.message });
+        return res.status(500).json({ message: "Something went wrong in create post controller : " + error.message });
     }
 }
 
@@ -43,7 +44,7 @@ export const getAllPosts = async (req, res) => {
 
         return res.status(200).json({ posts });
     } catch (error) {
-        return res.status(500).json({ message: "Something went wrong in get all posts controller" + error.message });
+        return res.status(500).json({ message: "Something went wrong in get all posts controller : " + error.message });
     }
 }
 
@@ -70,13 +71,13 @@ export const deletePost = async (req, res) => {
 
         return res.status(200).json({ message: "Post deleted successfully" });
     } catch (error) {
-        return res.status(500).json({ message: "Something went wrong in delete post controller" + error.message });
+        return res.status(500).json({ message: "Something went wrong in delete post controller : " + error.message });
     }
 }
 
 //get comment by post
 export const getCommentByPost = async (req, res) => {
-    const { post_id } = req.body;
+    const { post_id } = req.query;
     //we dont need token here because even if we are unauthorized we can get the comments
     try {
         const post = await Post.findById(post_id);
@@ -87,9 +88,9 @@ export const getCommentByPost = async (req, res) => {
         const comments = await Comment.find({ postId: post_id })
             .populate('userId', 'name username email profilePicture');
 
-        return res.status(200).json({ comments });
+        return res.status(200).json({ comments: post.comments });
     } catch (error) {
-        return res.status(500).json({ message: "Something went wrong in get comment by post controller" + error.message });
+        return res.status(500).json({ message: "Something went wrong in get comment by post controller : " + error.message });
     }
 }
 
@@ -115,7 +116,7 @@ export const deleteComment = async (req, res) => {
 
         return res.status(200).json({ message: "Comment deleted successfully" });
     } catch (error) {
-        return res.status(500).json({ message: "Something went wrong in delete comment controller" + error.message });
+        return res.status(500).json({ message: "Something went wrong in delete comment controller : " + error.message });
     }
 }
 
@@ -133,6 +134,6 @@ export const increamentLikes = async (req, res) => {
 
         return res.status(200).json({ message: "Post liked successfully" });
     } catch (error) {
-        return res.status(500).json({ message: "Something went wrong in increament likes controller" + error.message });
+        return res.status(500).json({ message: "Something went wrong in increament likes controller : " + error.message });
     }
 }

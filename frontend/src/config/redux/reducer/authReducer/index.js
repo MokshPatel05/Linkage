@@ -3,7 +3,8 @@ import { createSlice } from "@reduxjs/toolkit";
 
 
 const initialState = {
-    user: [],
+    user: null,
+    token: null,
     isError: false,
     isSuccess: false,
     isLoading: false,
@@ -33,6 +34,10 @@ const authSlice = createSlice({
         },
         setIsTokenIsNotThere: (state) => {
             state.isTokenThere = false;
+        },
+        setTokenFromStorage: (state, action) => {
+            state.token = action.payload;
+            state.isTokenThere = !!action.payload; // Clever use of !! to turn string into boolean
         }
     },
 
@@ -64,13 +69,13 @@ const authSlice = createSlice({
                 state.isLoading = true;
                 state.message = "Registering in..."
             })
-            .addCase(registerUser.fulfilled, (state, action) => {
+            .addCase(registerUser.fulfilled, (state) => {
                 state.isLoading = false;
                 state.isError = false;
                 state.isSuccess = true;
-                state.loggedIn = true;
-                state.token = action.payload;
-                state.message = "Register successful"
+                state.loggedIn = false;
+                state.token = null;
+                state.message = "Registration successful. Please log in."
             })
             .addCase(registerUser.rejected, (state, action) => {
                 state.isLoading = false;
@@ -113,5 +118,5 @@ const authSlice = createSlice({
     }
 });
 
-export const { reset, handleLoginUser, clearMessage, setTokenIsThere, setIsTokenIsNotThere } = authSlice.actions;
+export const { reset, handleLoginUser, clearMessage, setTokenIsThere, setIsTokenIsNotThere, setTokenFromStorage } = authSlice.actions;
 export default authSlice.reducer;

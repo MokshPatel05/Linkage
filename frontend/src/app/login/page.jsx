@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import UserLayout from '@/layout/UserLayout/page'
 import { useSelector, useDispatch } from 'react-redux';
 import { useRouter } from 'next/navigation';
@@ -13,6 +13,7 @@ const Login = () => {
     const authState = useSelector((state) => state.auth);
     const router = useRouter();
     const dispatch = useDispatch();
+    const hasRedirected = useRef(false);
     //useStates
     const [isLogin, setIsLogin] = useState(false);
     const [username, setUsername] = useState('');
@@ -20,19 +21,15 @@ const Login = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
-    // Redirect to dashboard if already logged in
+    // Redirect to dashboard only when we have valid auth AND token in localStorage (avoids post-logout redirect loop)
     useEffect(() => {
-        if (authState.loggedIn) {
-            router.push('/dashboard');
-        }
-    }, [authState.loggedIn]);
-
-    //check if the token assists then redirect the user into the "/dashboard"
-    useEffect(() => {
-        if (authState.token) {
-            router.push('/dashboard');
-        }
-    }, []);
+        const tokenInStorage = typeof window !== "undefined" ? localStorage.getItem("token") : null;
+        const hasValidAuth = (authState.loggedIn || authState.token) && tokenInStorage;
+        if (!tokenInStorage) hasRedirected.current = false;
+        if (hasRedirected.current || !hasValidAuth) return;
+        hasRedirected.current = true;
+        router.push("/dashboard");
+    }, [authState.loggedIn, authState.token, router]);
 
     //clear the error or success message in the form if the form has been chagned
     useEffect(() => {
@@ -55,7 +52,7 @@ const Login = () => {
                     <div className={styles.cardContainer__left}>
                         <p className={styles.cardLeft__heading}>{isLogin ? "Login" : "Register"}</p>
                         <p style={{ color: authState.isError ? "red" : "green" }}>
-                            {typeof authState.message === 'string' ? authState.message : authState.message.Message}
+                            {typeof authState.message === 'string' ? authState.message : authState.message?.Message}
                         </p>
                         <div className={styles.inputContainers}>
 

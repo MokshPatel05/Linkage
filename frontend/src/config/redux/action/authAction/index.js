@@ -65,4 +65,22 @@ export const getAllUsers = createAsyncThunk(
             return thunkAPI.rejectWithValue("getAllUsers Thunk Failed : " + error.response.data.Message);
         }
     }
-)
+);
+
+export const logoutUser = createAsyncThunk(
+    "user/logout",
+    async (_, thunkAPI) => {
+        try {
+            const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
+            if (token) {
+                await clientServer.post("/logout", { token });
+            }
+        } catch (_) {
+            // Always clear client state even if server logout fails (e.g. network)
+        } finally {
+            if (typeof window !== "undefined") {
+                localStorage.removeItem("token");
+            }
+        }
+    }
+);

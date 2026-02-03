@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { register, login, updateProfilePicture, updateUserProfile, getUserAndProfile, updateProfileData, getAllUsersProfile, downloadResume, getMyConnectionRequest, getConnectionRequests, acceptConnectionRequest, sendConnectionRequest } from "../controllers/users.controller.js";
+import { register, login, logout, updateProfilePicture, updateUserProfile, getUserAndProfile, updateProfileData, getAllUsersProfile, downloadResume, getMyConnectionRequest, getConnectionRequests, acceptConnectionRequest, sendConnectionRequest } from "../controllers/users.controller.js";
 import multer from 'multer';
 
 const router = Router();
@@ -22,6 +22,7 @@ router.route("/update_profile_picture")
 
 router.route("/register").post(register)
 router.route("/login").post(login)
+router.route("/logout").post(logout)
 router.route("/user_update").post(updateUserProfile)
 router.route("/get_user_and_profile").get(getUserAndProfile)
 router.route("/update_profile_data").post(updateProfileData)
