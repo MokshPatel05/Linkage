@@ -1,0 +1,268 @@
+/* Page background to match Discover / LinkedIn feel */
+.pageWrapper {
+  background-color: #f9f9f9;
+  min-height: 100vh;
+  padding: 1.5rem 0;
+}
+
+.container {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 0 1rem 2rem;
+}
+
+.centeredState {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 40vh;
+  color: rgba(0, 0, 0, 0.7);
+  font-size: 0.95rem;
+}
+
+.errorText {
+  color: #b3261e;
+}
+
+/* Header card (profile hero area) */
+.headerCard {
+  position: relative;
+  background-color: #ffffff;
+  border-radius: 10px;
+  border: 1px solid #e0e0e0;
+  overflow: hidden;
+  margin-bottom: 1rem;
+}
+
+.banner {
+  height: 120px;
+  background: linear-gradient(90deg, #a0b4b7, #d0e3f5);
+}
+
+.headerContent {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 1rem;
+  padding: 0 1.5rem 1.25rem;
+  position: relative;
+  top: -40px; /* pull content up over banner */
+}
+
+.avatarWrapper {
+  position: relative;
+  width: 112px;
+  height: 112px;
+}
+
+.avatarWrapper img {
+  width: 112px;
+  height: 112px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid #ffffff;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  background-color: #ffffff;
+}
+
+.headerText {
+  align-self: end;
+}
+
+.headerText h1 {
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: rgba(0, 0, 0, 0.9);
+  margin: 0 0 0.2rem;
+}
+
+.headline {
+  font-size: 0.95rem;
+  color: rgba(0, 0, 0, 0.75);
+  margin: 0 0 0.25rem;
+}
+
+.subMeta {
+  font-size: 0.85rem;
+  color: rgba(0, 0, 0, 0.6);
+  margin: 0;
+}
+
+.dotSeparator::before {
+  content: "•";
+  margin: 0 0.4rem;
+}
+
+.headerActions {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  align-self: end;
+}
+
+.primaryBtn,
+.secondaryBtn {
+  border-radius: 20px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  padding: 0.4rem 1.1rem;
+  cursor: pointer;
+  transition: all 0.16s ease;
+}
+
+.primaryBtn {
+  background-color: #0a66c2;
+  border: 1px solid #0a66c2;
+  color: #ffffff;
+}
+
+.primaryBtn:hover {
+  background-color: #004182;
+  border-color: #004182;
+}
+
+.secondaryBtn {
+  background-color: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.6);
+  color: rgba(0, 0, 0, 0.8);
+}
+
+.secondaryBtn:hover {
+  background-color: #f3f2ef;
+}
+
+/* Layout: main and side column similar to LinkedIn */
+.mainLayout {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(260px, 1fr);
+  gap: 1rem;
+  margin-top: 0.5rem;
+}
+
+.mainColumn,
+.sideColumn {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.card {
+  background-color: #ffffff;
+  border-radius: 10px;
+  border: 1px solid #e0e0e0;
+  padding: 1rem 1.25rem 1.1rem;
+}
+
+.card h2 {
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: rgba(0, 0, 0, 0.9);
+  margin: 0 0 0.75rem;
+}
+
+.bodyText {
+  font-size: 0.95rem;
+  line-height: 1.5;
+  color: rgba(0, 0, 0, 0.8);
+  margin: 0;
+}
+
+.bodyTextMuted {
+  font-size: 0.9rem;
+  line-height: 1.45;
+  color: rgba(0, 0, 0, 0.55);
+  margin: 0;
+}
+
+/* Experience / Education list */
+.experienceList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.experienceItem + .experienceItem {
+  margin-top: 0.75rem;
+  border-top: 1px solid #f0f0f0;
+  padding-top: 0.75rem;
+}
+
+.expTitleRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 0.5rem;
+}
+
+.expPosition {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: rgba(0, 0, 0, 0.9);
+}
+
+.expYears {
+  font-size: 0.8rem;
+  color: rgba(0, 0, 0, 0.6);
+}
+
+.expCompany {
+  font-size: 0.9rem;
+  color: rgba(0, 0, 0, 0.7);
+  margin-top: 0.1rem;
+}
+
+/* Sidebar info */
+.sideInfoRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding: 0.25rem 0;
+  font-size: 0.85rem;
+}
+
+.sideLabel {
+  color: rgba(0, 0, 0, 0.6);
+}
+
+.sideValue {
+  color: rgba(0, 0, 0, 0.9);
+  font-weight: 500;
+}
+
+/* Responsive adjustments */
+@media (max-width: 900px) {
+  .headerContent {
+    grid-template-columns: auto 1fr;
+    grid-template-rows: auto auto;
+  }
+
+  .headerActions {
+    margin-top: 0.5rem;
+    justify-content: flex-start;
+  }
+
+  .mainLayout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .headerContent {
+    grid-template-columns: auto 1fr;
+    top: -30px;
+  }
+
+  .avatarWrapper {
+    width: 96px;
+    height: 96px;
+  }
+
+  .avatarWrapper img {
+    width: 96px;
+    height: 96px;
+  }
+
+  .card {
+    padding: 0.9rem 1rem 1rem;
+  }
+}
+

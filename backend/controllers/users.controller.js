@@ -184,7 +184,7 @@ export const getUserAndProfile = async (req, res) => {
             return res.status(404).json({ Message: "User not found" });
         }
         const userProfile = await Profile.findOne({ userId: user._id })
-            .populate("userId", "name username profilePicture");
+            .populate("userId", "name username email profilePicture");
         return res.status(200).json({ user, userProfile });
     } catch (error) {
         return res.status(500).json({ Message: "Something went wrong in getUserAndProfile controller : " + error.message });
