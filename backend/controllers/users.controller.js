@@ -16,26 +16,56 @@ const convertProfileToPDF = async (profileData) => {
     const stream = fs.createWriteStream("uploads/" + outPutPath);
     pdf.pipe(stream);
 
-    pdf.image(`uploads/profile_pictures/${profileData.userId.profilePicture}`, { align: "center", valign: "center", fit: [250, 300] });
+    // Try to add profile picture, but don't fail if image can't be processed
+    try {
+        const profilePicturePath = `uploads/profile_pictures/${profileData.userId.profilePicture}`;
+        if (profileData.userId.profilePicture && fs.existsSync(profilePicturePath)) {
+            pdf.image(profilePicturePath, { align: "center", valign: "center", fit: [250, 300] });
+            pdf.moveDown(2);
+        }
+    } catch (imageError) {
+        console.log("Could not add profile picture to resume:", imageError.message);
+        // Continue without image
+    }
+
     pdf.fontSize(16).text(`Name : ${profileData.userId.name}`, { align: "center" });
     pdf.fontSize(16).text(`Username : ${profileData.userId.username}`, { align: "center" });
     pdf.fontSize(16).text(`Email : ${profileData.userId.email}`, { align: "center" });
-    pdf.fontSize(16).text(`Bio : ${profileData.bio}`, { align: "center" });
-    pdf.fontSize(16).text(`Current Post : ${profileData.currentPost}`, { align: "center" });
-    pdf.fontSize(16).text(`Past Work : `)
-    profileData.pastWork.forEach((work, index) => {
-        pdf.fontSize(16).text(`Company : ${work.company}`, { align: "center" });
-        pdf.fontSize(16).text(`Position : ${work.position}`, { align: "center" });
-        pdf.fontSize(16).text(`Years : ${work.years}`, { align: "center" });
-    })
-    pdf.fontSize(16).text(`Education : `)
-    profileData.education.forEach((education, index) => {
-        pdf.fontSize(16).text(`School : ${education.school}`, { align: "center" });
-        pdf.fontSize(16).text(`Degree : ${education.degree}`, { align: "center" });
-        pdf.fontSize(16).text(`Field of Study : ${education.fieldOfStudy}`, { align: "center" });
-        pdf.fontSize(16).text(`Years : ${education.years}`, { align: "center" });
-    })
+    pdf.moveDown();
+    pdf.fontSize(16).text(`Bio : ${profileData.bio || "N/A"}`, { align: "center" });
+    pdf.fontSize(16).text(`Current Post : ${profileData.currentPost || "N/A"}`, { align: "center" });
+    pdf.moveDown();
+
+    pdf.fontSize(16).text(`Past Work : `);
+    if (profileData.pastWork && profileData.pastWork.length > 0) {
+        profileData.pastWork.forEach((work, index) => {
+            pdf.fontSize(14).text(`Company : ${work.company || "N/A"}`, { align: "center" });
+            pdf.fontSize(14).text(`Position : ${work.position || "N/A"}`, { align: "center" });
+            pdf.fontSize(14).text(`Years : ${work.years || "N/A"}`, { align: "center" });
+            pdf.moveDown(0.5);
+        });
+    } else {
+        pdf.fontSize(14).text("No past work experience added.", { align: "center" });
+    }
+    pdf.moveDown();
+
+    pdf.fontSize(16).text(`Education : `);
+    if (profileData.education && profileData.education.length > 0) {
+        profileData.education.forEach((education, index) => {
+            pdf.fontSize(14).text(`School : ${education.school || "N/A"}`, { align: "center" });
+            pdf.fontSize(14).text(`Degree : ${education.degree || "N/A"}`, { align: "center" });
+            pdf.fontSize(14).text(`Field of Study : ${education.fieldOfStudy || "N/A"}`, { align: "center" });
+            pdf.fontSize(14).text(`Years : ${education.years || "N/A"}`, { align: "center" });
+            pdf.moveDown(0.5);
+        });
+    } else {
+        pdf.fontSize(14).text("No education history added.", { align: "center" });
+    }
+
     pdf.end();
+
+    // Wait for the stream to finish writing
+    await new Promise((resolve) => stream.on("finish", resolve));
 
     return outPutPath;
 };

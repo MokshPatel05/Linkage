@@ -20,6 +20,10 @@ export default function ProfilePage() {
   const [saveMessage, setSaveMessage] = useState("");
   const [saveError, setSaveError] = useState("");
 
+  const [isDownloading, setIsDownloading] = useState(false);
+  const [downloadMessage, setDownloadMessage] = useState("");
+  const [downloadError, setDownloadError] = useState("");
+
   const [userForm, setUserForm] = useState({
     name: "",
     username: "",
@@ -164,6 +168,42 @@ export default function ProfilePage() {
       setSaveError(message);
     } finally {
       setIsSaving(false);
+    }
+  };
+
+  const handleDownloadResume = async () => {
+    const profile = authState.user;
+    const userId = profile?.userId?._id;
+
+    if (!userId) {
+      setDownloadError("User ID not found. Please reload the page.");
+      return;
+    }
+
+    setIsDownloading(true);
+    setDownloadMessage("");
+    setDownloadError("");
+
+    try {
+      const response = await clientServer.get(
+        `/user/download_resume?id=${userId}`
+      );
+      const pdfPath = response.data.Message;
+
+      if (pdfPath) {
+        // Open the PDF in a new tab for download
+        window.open(`${BASE_URL}/${pdfPath}`, "_blank");
+        setDownloadMessage("Resume generated successfully!");
+      } else {
+        setDownloadError("Failed to generate resume. Please try again.");
+      }
+    } catch (err) {
+      const message =
+        err?.response?.data?.Message ||
+        "Something went wrong while generating your resume.";
+      setDownloadError(message);
+    } finally {
+      setIsDownloading(false);
     }
   };
 
@@ -432,6 +472,27 @@ export default function ProfilePage() {
                         onClick={handleSave}
                       >
                         {isSaving ? "Saving..." : "Save profile"}
+                      </button>
+                    </section>
+
+                    <section className={styles.card}>
+                      <h2>Download Resume</h2>
+                      <p className={styles.bodyTextMuted}>
+                        Generate and download your profile as a PDF resume.
+                      </p>
+                      {downloadMessage && (
+                        <p className={styles.successText}>{downloadMessage}</p>
+                      )}
+                      {downloadError && (
+                        <p className={styles.errorText}>{downloadError}</p>
+                      )}
+                      <button
+                        type="button"
+                        className={styles.secondaryBtn}
+                        disabled={isDownloading}
+                        onClick={handleDownloadResume}
+                      >
+                        {isDownloading ? "Generating..." : "Download Resume"}
                       </button>
                     </section>
                   </aside>
