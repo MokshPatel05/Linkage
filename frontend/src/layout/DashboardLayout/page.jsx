@@ -3,9 +3,10 @@ import React from 'react'
 
 import styles from './DashboardLayout.module.css'
 import { useRouter } from 'next/navigation'
-import { setTokenIsThere } from '@/config/redux/reducer/authReducer';
+import { setTokenIsThere, setTokenFromStorage } from '@/config/redux/reducer/authReducer';
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
+import { getIncomingConnectionRequests, getMyConnectionRequests, getMyConnections } from '@/config/redux/action/authAction';
 
 const DashboardLayout = ({ children }) => {
 
@@ -21,11 +22,18 @@ const DashboardLayout = ({ children }) => {
             // Stop here. Don't try to touch localStorage or the app will crash.
             return;
         }
-        if (!localStorage.getItem("token")) {
+        const storedToken = localStorage.getItem("token");
+        if (!storedToken) {
             router.push("/login");
             return;
         }
         dispatch(setTokenIsThere());
+        dispatch(setTokenFromStorage(storedToken));
+
+        // Preload connection-related data for LinkedIn-like behaviour
+        dispatch(getMyConnections({ token: storedToken }));
+        dispatch(getMyConnectionRequests({ token: storedToken }));
+        dispatch(getIncomingConnectionRequests({ token: storedToken }));
     }, [router, dispatch]);
 
     return (

@@ -1,0 +1,251 @@
+.pageWrapper {
+  background-color: #f9f9f9;
+  min-height: 100vh;
+  padding: 1.5rem 0;
+}
+
+.container {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 0 1rem 2rem;
+}
+
+.centeredState {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 40vh;
+  color: rgba(0, 0, 0, 0.7);
+  font-size: 0.95rem;
+}
+
+.headerCard {
+  position: relative;
+  background-color: #ffffff;
+  border-radius: 10px;
+  border: 1px solid #e0e0e0;
+  overflow: hidden;
+  margin-bottom: 1rem;
+}
+
+.banner {
+  height: 100px;
+  background: linear-gradient(90deg, #a0b4b7, #d0e3f5);
+}
+
+.headerContent {
+  display: flex;
+  align-items: flex-end;
+  gap: 1rem;
+  padding: 0 1.5rem 1.25rem;
+  position: relative;
+  top: -30px;
+}
+
+.avatarWrapper {
+  width: 96px;
+  height: 96px;
+}
+
+.avatarWrapper img {
+  width: 96px;
+  height: 96px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid #ffffff;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  background-color: #ffffff;
+}
+
+.headerText h1 {
+  margin: 0 0 0.15rem;
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: rgba(0, 0, 0, 0.9);
+}
+
+.subMeta {
+  margin: 0;
+  font-size: 0.9rem;
+  color: rgba(0, 0, 0, 0.6);
+}
+
+.mainLayout {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(260px, 1fr);
+  gap: 1rem;
+  margin-top: 0.5rem;
+}
+
+.mainColumn,
+.sideColumn {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.card {
+  background-color: #ffffff;
+  border-radius: 10px;
+  border: 1px solid #e0e0e0;
+  padding: 1rem 1.25rem 1.1rem;
+}
+
+.card h2 {
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: rgba(0, 0, 0, 0.9);
+  margin: 0 0 0.75rem;
+}
+
+.formRow {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  margin-bottom: 0.75rem;
+}
+
+.formRow label {
+  font-size: 0.85rem;
+  color: rgba(0, 0, 0, 0.7);
+}
+
+.formRow input,
+.formRow textarea {
+  border: 1px solid #d0d7de;
+  border-radius: 6px;
+  padding: 0.45rem 0.6rem;
+  font-size: 0.9rem;
+  outline: none;
+}
+
+.formRow input:focus,
+.formRow textarea:focus {
+  border-color: #0a66c2;
+  box-shadow: 0 0 0 1px rgba(10, 102, 194, 0.2);
+}
+
+.formRow textarea {
+  resize: vertical;
+}
+
+.sectionHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.smallButton {
+  border-radius: 16px;
+  border: 1px solid #0a66c2;
+  background-color: #ffffff;
+  color: #0a66c2;
+  padding: 0.2rem 0.7rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.smallButton:hover {
+  background-color: #eef3f8;
+}
+
+.nestedCard {
+  border-radius: 8px;
+  border: 1px solid #e0e0e0;
+  padding: 0.6rem 0.7rem 0.1rem;
+  margin-bottom: 0.6rem;
+  background-color: #fafafa;
+}
+
+.bodyTextMuted {
+  font-size: 0.9rem;
+  line-height: 1.45;
+  color: rgba(0, 0, 0, 0.55);
+  margin: 0;
+}
+
+.bodyText {
+  font-size: 0.95rem;
+  line-height: 1.5;
+  color: rgba(0, 0, 0, 0.8);
+  margin: 0;
+}
+
+.primaryBtn {
+  width: 100%;
+  border-radius: 20px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  padding: 0.55rem 1.1rem;
+  cursor: pointer;
+  background-color: #0a66c2;
+  border: 1px solid #0a66c2;
+  color: #ffffff;
+  transition: all 0.16s ease;
+  margin-top: 0.5rem;
+}
+
+.primaryBtn[disabled] {
+  opacity: 0.7;
+  cursor: default;
+}
+
+.primaryBtn:not([disabled]):hover {
+  background-color: #004182;
+  border-color: #004182;
+}
+
+.secondaryBtn {
+  width: 100%;
+  border-radius: 20px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  padding: 0.55rem 1.1rem;
+  cursor: pointer;
+  background-color: #ffffff;
+  border: 1px solid #0a66c2;
+  color: #0a66c2;
+  transition: all 0.16s ease;
+  margin-top: 0.5rem;
+}
+
+.secondaryBtn[disabled] {
+  opacity: 0.7;
+  cursor: default;
+}
+
+.secondaryBtn:not([disabled]):hover {
+  background-color: #eef3f8;
+}
+
+.successText {
+  color: #0a7c2f;
+  font-size: 0.85rem;
+  margin-top: 0.3rem;
+}
+
+.errorText {
+  color: #b3261e;
+  font-size: 0.85rem;
+  margin-top: 0.3rem;
+}
+
+@media (max-width: 900px) {
+  .mainLayout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .headerContent {
+    top: -24px;
+    padding: 0 1rem 0.9rem;
+  }
+
+  .card {
+    padding: 0.9rem 1rem 1rem;
+  }
+}
+

@@ -42,7 +42,19 @@ const Navbar = () => {
                             <div
                                 style={{ display: "flex", gap: "1rem" }}>
                                 <p>Hey, {authState.user?.userId?.name || "Guest"}</p>
-                                <p style={{ color: "#000", cursor: "pointer", fontWeight: "bold" }}>Profile</p>
+                                <p
+                                    style={{ color: "#000", cursor: "pointer", fontWeight: "bold" }}
+                                    onClick={() => {
+                                        const username = authState.user?.userId?.username;
+                                        if (username) {
+                                            router.push(`/view_profile/${username}`);
+                                        } else {
+                                            router.push("/login");
+                                        }
+                                    }}
+                                >
+                                    Profile
+                                </p>
                                 <p onClick={handleLogout}>Logout</p>
                             </div>
                         ) : (

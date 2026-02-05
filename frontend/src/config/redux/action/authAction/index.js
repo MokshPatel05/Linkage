@@ -67,6 +67,98 @@ export const getAllUsers = createAsyncThunk(
     }
 );
 
+// --- Connection related thunks ---
+
+// Send a connection request to another user
+export const sendConnectionRequest = createAsyncThunk(
+    "connections/sendRequest",
+    async ({ token, connectionUserId }, thunkAPI) => {
+        try {
+            const response = await clientServer.post("/user/send_connection_request", {
+                token,
+                ConnectionId: connectionUserId,
+            });
+            return thunkAPI.fulfillWithValue({
+                message: response.data.Message,
+                connectionUserId,
+            });
+        } catch (error) {
+            const message = error?.response?.data?.Message || "Failed to send connection request";
+            return thunkAPI.rejectWithValue(message);
+        }
+    }
+);
+
+// Requests I have sent
+export const getMyConnectionRequests = createAsyncThunk(
+    "connections/getMySentRequests",
+    async ({ token }, thunkAPI) => {
+        try {
+            const response = await clientServer.get("/user/get_my_connection_request", {
+                params: { token },
+            });
+            return thunkAPI.fulfillWithValue(response.data);
+        } catch (error) {
+            const message = error?.response?.data?.Message || "Failed to get my connection requests";
+            return thunkAPI.rejectWithValue(message);
+        }
+    }
+);
+
+// Requests I have received
+export const getIncomingConnectionRequests = createAsyncThunk(
+    "connections/getIncomingRequests",
+    async ({ token }, thunkAPI) => {
+        try {
+            const response = await clientServer.get("/user/get_connection_requests", {
+                params: { token },
+            });
+            return thunkAPI.fulfillWithValue(response.data);
+        } catch (error) {
+            const message = error?.response?.data?.Message || "Failed to get incoming connection requests";
+            return thunkAPI.rejectWithValue(message);
+        }
+    }
+);
+
+// Accept or reject a specific request
+export const respondToConnectionRequest = createAsyncThunk(
+    "connections/respondToRequest",
+    async ({ token, otherUserId, actionType }, thunkAPI) => {
+        try {
+            const response = await clientServer.post("/user/accept_connection_request", {
+                token,
+                connectionId: otherUserId,
+                action_type: actionType, // "accept" | "reject"
+            });
+            return thunkAPI.fulfillWithValue({
+                message: response.data.Message,
+                otherUserId,
+                actionType,
+            });
+        } catch (error) {
+            const message = error?.response?.data?.Message || "Failed to respond to connection request";
+            return thunkAPI.rejectWithValue(message);
+        }
+    }
+);
+
+// All accepted connections for logged in user
+export const getMyConnections = createAsyncThunk(
+    "connections/getMyConnections",
+    async ({ token }, thunkAPI) => {
+        try {
+            const response = await clientServer.get("/user/get_my_connections", {
+                params: { token },
+            });
+            return thunkAPI.fulfillWithValue(response.data);
+        } catch (error) {
+            const message = error?.response?.data?.Message || "Failed to get connections";
+            return thunkAPI.rejectWithValue(message);
+        }
+    }
+);
+
 export const logoutUser = createAsyncThunk(
     "user/logout",
     async (_, thunkAPI) => {

@@ -4,21 +4,39 @@ import React, { useEffect } from 'react'
 import UserLayout from '@/layout/UserLayout/page'
 import DashboardLayout from '../../layout/DashboardLayout/page'
 import { useSelector, useDispatch } from 'react-redux'
-import { getAllUsers } from '@/config/redux/action/authAction'
+import { getAllUsers, sendConnectionRequest, getMyConnectionRequests } from '@/config/redux/action/authAction'
 import styles from "./discover.module.css"
 import { BASE_URL } from '@/config';
-
+import { useRouter } from 'next/navigation';  
 
 export default function DiscoverPage() {
 
   const authState = useSelector((state) => state.auth);
   const dispatch = useDispatch();
-
+  const router = useRouter();
+  
   useEffect(() => {
     if (!authState.all_profile_fetched) {
       dispatch(getAllUsers());
     }
   }, []);
+
+  const token = authState.token || (typeof window !== "undefined" ? localStorage.getItem("token") : null);
+
+  const handleConnect = async (userId) => {
+    if (!token) return;
+    try {
+      await dispatch(
+        sendConnectionRequest({
+          token,
+          connectionUserId: userId,
+        })
+      ).unwrap();
+      await dispatch(getMyConnectionRequests({ token })).unwrap();
+    } catch (_) {
+      // For now ignore UI errors here; detailed errors can be surfaced later
+    }
+  };
 
   return (
     <UserLayout>
@@ -30,7 +48,7 @@ export default function DiscoverPage() {
             {
               authState.all_profile_fetched && authState.all_users.map((user) => {
                 return (
-                  <div key={user._id} className={styles.userCard}>
+                  <div key={user._id} className={styles.userCard} onClick={() => {router.push(`/view_profile/${user.userId.username}`)}}>
                     {/* Background Banner (Optional: purely decorative for now) */}
                     <div style={{
                       position: 'absolute', top: 0, left: 0, width: '100%', height: '60px',
@@ -47,8 +65,17 @@ export default function DiscoverPage() {
                     <p style={{ zIndex: 1 }}>{user.userId.name}</p>
                     <p style={{ zIndex: 1 }}>@{user.userId.username}</p>
 
-                    {/* Connect Button */}
-                    <button className={styles.connectBtn} style={{ zIndex: 1 }}>
+                    {/* Connect Button (delegated to profile page for full state),
+                        kept simple here to avoid complex status logic */}
+                    <button
+                      className={styles.connectBtn}
+                      style={{ zIndex: 1 }}
+                      type="button"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleConnect(user.userId._id);
+                      }}
+                    >
                       Connect
                     </button>
                   </div>

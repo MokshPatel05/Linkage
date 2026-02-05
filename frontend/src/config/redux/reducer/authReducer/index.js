@@ -1,4 +1,4 @@
-import { loginUser, registerUser, getAboutUser, getAllUsers } from "../../action/authAction/index.js"
+import { loginUser, registerUser, getAboutUser, getAllUsers, getMyConnections, getIncomingConnectionRequests, getMyConnectionRequests, sendConnectionRequest, respondToConnectionRequest } from "../../action/authAction/index.js"
 import { createSlice } from "@reduxjs/toolkit";
 
 
@@ -12,9 +12,10 @@ const initialState = {
     message: "",
     isTokenThere: false,
     profileFetched: false,
-    connections: [],
+    connections: [], // accepted connections
     all_users: [],
-    connectionRequests: [],
+    connectionRequests: [], // incoming pending requests
+    sentConnectionRequests: [], // requests I have sent
     all_profile_fetched: false,
 }
 
@@ -114,6 +115,35 @@ const authSlice = createSlice({
                 state.all_users = action.payload.profiles;
                 state.all_profile_fetched = true;
                 state.message = "Get user data successful"
+            })
+
+            // --- Connection related reducers ---
+
+            // My accepted connections
+            .addCase(getMyConnections.fulfilled, (state, action) => {
+                state.connections = action.payload;
+            })
+
+            // Requests I have sent
+            .addCase(getMyConnectionRequests.fulfilled, (state, action) => {
+                state.sentConnectionRequests = action.payload;
+            })
+
+            // Requests I have received
+            .addCase(getIncomingConnectionRequests.fulfilled, (state, action) => {
+                state.connectionRequests = action.payload;
+            })
+
+            // When I send a request successfully, optimistically push to sentConnectionRequests
+            .addCase(sendConnectionRequest.fulfilled, (state, action) => {
+                // We don't have full user object here; lists will be refreshed separately.
+                // For now just leave state as-is and rely on refetch thunks where needed.
+                state.message = action.payload.message;
+            })
+
+            // When I accept / reject, we will usually refetch lists in UI.
+            .addCase(respondToConnectionRequest.fulfilled, (state, action) => {
+                state.message = action.payload.message;
             })
     }
 });

@@ -16,26 +16,56 @@ const convertProfileToPDF = async (profileData) => {
     const stream = fs.createWriteStream("uploads/" + outPutPath);
     pdf.pipe(stream);
 
-    pdf.image(`uploads/profile_pictures/${profileData.userId.profilePicture}`, { align: "center", valign: "center", fit: [250, 300] });
+    // Try to add profile picture, but don't fail if image can't be processed
+    try {
+        const profilePicturePath = `uploads/profile_pictures/${profileData.userId.profilePicture}`;
+        if (profileData.userId.profilePicture && fs.existsSync(profilePicturePath)) {
+            pdf.image(profilePicturePath, { align: "center", valign: "center", fit: [250, 300] });
+            pdf.moveDown(2);
+        }
+    } catch (imageError) {
+        console.log("Could not add profile picture to resume:", imageError.message);
+        // Continue without image
+    }
+
     pdf.fontSize(16).text(`Name : ${profileData.userId.name}`, { align: "center" });
     pdf.fontSize(16).text(`Username : ${profileData.userId.username}`, { align: "center" });
     pdf.fontSize(16).text(`Email : ${profileData.userId.email}`, { align: "center" });
-    pdf.fontSize(16).text(`Bio : ${profileData.bio}`, { align: "center" });
-    pdf.fontSize(16).text(`Current Post : ${profileData.currentPost}`, { align: "center" });
-    pdf.fontSize(16).text(`Past Work : `)
-    profileData.pastWork.forEach((work, index) => {
-        pdf.fontSize(16).text(`Company : ${work.company}`, { align: "center" });
-        pdf.fontSize(16).text(`Position : ${work.position}`, { align: "center" });
-        pdf.fontSize(16).text(`Years : ${work.years}`, { align: "center" });
-    })
-    pdf.fontSize(16).text(`Education : `)
-    profileData.education.forEach((education, index) => {
-        pdf.fontSize(16).text(`School : ${education.school}`, { align: "center" });
-        pdf.fontSize(16).text(`Degree : ${education.degree}`, { align: "center" });
-        pdf.fontSize(16).text(`Field of Study : ${education.fieldOfStudy}`, { align: "center" });
-        pdf.fontSize(16).text(`Years : ${education.years}`, { align: "center" });
-    })
+    pdf.moveDown();
+    pdf.fontSize(16).text(`Bio : ${profileData.bio || "N/A"}`, { align: "center" });
+    pdf.fontSize(16).text(`Current Post : ${profileData.currentPost || "N/A"}`, { align: "center" });
+    pdf.moveDown();
+
+    pdf.fontSize(16).text(`Past Work : `);
+    if (profileData.pastWork && profileData.pastWork.length > 0) {
+        profileData.pastWork.forEach((work, index) => {
+            pdf.fontSize(14).text(`Company : ${work.company || "N/A"}`, { align: "center" });
+            pdf.fontSize(14).text(`Position : ${work.position || "N/A"}`, { align: "center" });
+            pdf.fontSize(14).text(`Years : ${work.years || "N/A"}`, { align: "center" });
+            pdf.moveDown(0.5);
+        });
+    } else {
+        pdf.fontSize(14).text("No past work experience added.", { align: "center" });
+    }
+    pdf.moveDown();
+
+    pdf.fontSize(16).text(`Education : `);
+    if (profileData.education && profileData.education.length > 0) {
+        profileData.education.forEach((education, index) => {
+            pdf.fontSize(14).text(`School : ${education.school || "N/A"}`, { align: "center" });
+            pdf.fontSize(14).text(`Degree : ${education.degree || "N/A"}`, { align: "center" });
+            pdf.fontSize(14).text(`Field of Study : ${education.fieldOfStudy || "N/A"}`, { align: "center" });
+            pdf.fontSize(14).text(`Years : ${education.years || "N/A"}`, { align: "center" });
+            pdf.moveDown(0.5);
+        });
+    } else {
+        pdf.fontSize(14).text("No education history added.", { align: "center" });
+    }
+
     pdf.end();
+
+    // Wait for the stream to finish writing
+    await new Promise((resolve) => stream.on("finish", resolve));
 
     return outPutPath;
 };
@@ -184,7 +214,7 @@ export const getUserAndProfile = async (req, res) => {
             return res.status(404).json({ Message: "User not found" });
         }
         const userProfile = await Profile.findOne({ userId: user._id })
-            .populate("userId", "name username profilePicture");
+            .populate("userId", "name username email profilePicture");
         return res.status(200).json({ user, userProfile });
     } catch (error) {
         return res.status(500).json({ Message: "Something went wrong in getUserAndProfile controller : " + error.message });
@@ -249,12 +279,22 @@ export const sendConnectionRequest = async (req, res) => {
         if (!ConnectionUser) {
             return res.status(400).json({ Message: "Connection User is not available" });
         }
+        // Check for any existing relationship or pending request in either direction
         const existingRequest = await ConnectionRequest.findOne({
-            userId: user._id,
-            connectionId: ConnectionUser._id,
-        })
+            $or: [
+                { userId: user._id, connectionId: ConnectionUser._id },
+                { userId: ConnectionUser._id, connectionId: user._id }
+            ]
+        });
         if (existingRequest) {
-            return res.status(400).json({ Message: "Connection Request already sent" });
+            if (existingRequest.status_accepted === true) {
+                return res.status(400).json({ Message: "You are already connected with this user" });
+            }
+            if (existingRequest.status_accepted === null) {
+                return res.status(400).json({ Message: "Connection Request already pending" });
+            }
+            // If previously rejected, we could allow a new request; for now, prevent spam.
+            return res.status(400).json({ Message: "A connection decision already exists for this user" });
         }
         const request = new ConnectionRequest({
             userId: user._id,
@@ -287,7 +327,7 @@ export const getMyConnectionRequest = async (req, res) => {
     }
 }
 
-//What are my connections requests controller
+//What are my connection requests controller (requests I have received)
 export const getConnectionRequests = async (req, res) => {
     const { token } = req.query;
 
@@ -304,7 +344,7 @@ export const getConnectionRequests = async (req, res) => {
     }
 }
 
-//accept connection request controller
+//accept / reject connection request controller
 export const acceptConnectionRequest = async (req, res) => {
     const { token, connectionId, action_type } = req.body;
     try {
@@ -312,12 +352,19 @@ export const acceptConnectionRequest = async (req, res) => {
         if (!user) {
             return res.status(404).json({ Message: "User not found" });
         }
+
+        // Here `user` is the receiver of the request, and `connectionId`
+        // is the sender's userId.
         const connectionRequest = await ConnectionRequest.findOne({
-            userId: user._id,
-            connectionId: connectionId,
+            userId: connectionId,
+            connectionId: user._id,
         })
         if (!connectionRequest) {
             return res.status(404).json({ Message: "Connection Request not found" });
+        }
+        // Only allow action on pending requests
+        if (connectionRequest.status_accepted !== null) {
+            return res.status(400).json({ Message: "Connection Request already processed" });
         }
         if (action_type === "accept") {
             connectionRequest.status_accepted = true;
@@ -330,6 +377,60 @@ export const acceptConnectionRequest = async (req, res) => {
         }
     } catch (error) {
         return res.status(500).json({ Message: "Something went wrong in acceptConnectionRequest controller : " + error.message });
+    }
+}
+
+//Get all accepted connections for logged in user
+export const getMyConnections = async (req, res) => {
+    const { token } = req.query;
+    try {
+        const user = await User.findOne({ token });
+        if (!user) {
+            return res.status(404).json({ Message: "User not found" });
+        }
+
+        const connections = await ConnectionRequest.find({
+            status_accepted: true,
+            $or: [
+                { userId: user._id },
+                { connectionId: user._id }
+            ]
+        })
+            .populate("userId", "name username email profilePicture")
+            .populate("connectionId", "name username email profilePicture");
+
+        return res.status(200).json(connections);
+    } catch (error) {
+        return res.status(500).json({ Message: "Something went wrong in getMyConnections controller : " + error.message });
+    }
+}
+
+//Get accepted connections for any user (public profile view)
+export const getUserConnectionsByUserId = async (req, res) => {
+    const { user_id } = req.query;
+    try {
+        if (!user_id) {
+            return res.status(400).json({ Message: "user_id is required" });
+        }
+
+        const user = await User.findById(user_id);
+        if (!user) {
+            return res.status(404).json({ Message: "User not found" });
+        }
+
+        const connections = await ConnectionRequest.find({
+            status_accepted: true,
+            $or: [
+                { userId: user._id },
+                { connectionId: user._id }
+            ]
+        })
+            .populate("userId", "name username email profilePicture")
+            .populate("connectionId", "name username email profilePicture");
+
+        return res.status(200).json(connections);
+    } catch (error) {
+        return res.status(500).json({ Message: "Something went wrong in getUserConnectionsByUserId controller : " + error.message });
     }
 }
 
