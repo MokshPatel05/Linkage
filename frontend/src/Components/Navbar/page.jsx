@@ -41,7 +41,6 @@ const Navbar = () => {
                         authState.loggedIn ? (
                             <div
                                 style={{ display: "flex", gap: "1rem" }}>
-                                <p>Hey, {authState.user?.userId?.name || "Guest"}</p>
                                 <p
                                     style={{ color: "#000", cursor: "pointer", fontWeight: "bold" }}
                                     onClick={() => {
